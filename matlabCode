@@ -1,0 +1,271 @@
+data1 = readtable('user1_csv.csv');
+data2 = readtable('user2_csv.csv');
+data3 = readtable('user3_csv.csv');
+data4 = readtable('user4_csv.csv');
+
+Array1 = table2array(data1);
+
+Standing1 = sum(Array1(:, 2) == 1);
+Walking1 = sum(Array1(:, 2) == 2);
+Turn1 = sum(Array1(:, 2) == 3);
+Stairs_up1 = sum(Array1(:, 2) == 4);
+Stairs_down1 = sum(Array1(:, 2) == 5);
+
+Array2 = table2array(data2);
+
+Standing2 = sum(Array2(:, 2) == 1);
+Walking2 = sum(Array2(:, 2) == 2);
+Turn2 = sum(Array2(:, 2) == 3);
+Stairs_up2 = sum(Array2(:, 2) == 4);
+Stairs_down2 = sum(Array2(:, 2) == 5);
+
+Array3 = table2array(data3);
+
+Standing3 = sum(Array3(:, 2) == 1);
+Walking3 = sum(Array3(:, 2) == 2);
+Turn3 = sum(Array3(:, 2) == 3);
+Stairs_up3 = sum(Array3(:, 2) == 4);
+Stairs_down3 = sum(Array3(:, 2) == 5);
+
+Array4 = table2array(data4);
+
+Standing4 = sum(Array4(:, 2) == 1);
+Walking4 = sum(Array4(:, 2) == 2);
+Turn4 = sum(Array4(:, 2) == 3);
+Stairs_up4 = sum(Array4(:, 2) == 4);
+Stairs_down4 = sum(Array4(:, 2) == 5);
+
+A1 = [Standing1, Walking1, Turn1, Stairs_up1, Stairs_down1];
+
+A2 = [Standing2, Walking2, Turn2, Stairs_up2, Stairs_down2];
+
+A3 = [Standing3, Walking3, Turn3, Stairs_up3, Stairs_down3];
+
+A4 = [Standing4, Walking4, Turn4, Stairs_up4, Stairs_down4];
+
+X1 = categorical({'Standing','Walking','Turn','Stairs up', 'Stairs down'});
+X1 = reordercats(X1,{'Standing','Walking','Turn','Stairs up', 'Stairs down'});
+Y = [A1; A2; A3; A4];
+bar(X1,Y)
+figure
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% first user
+
+subplot(3, 3, 1)
+scatter(Array1(:, 3), Array1(:,8), ".")
+title("User1 - ACC X (G)")
+
+subplot(3, 3, 4)
+scatter(Array1(:, 3), Array1(:,9), ".")
+title("User1 - ACC Y (G)")
+
+subplot(3, 3, 7)
+scatter(Array1(:, 3), Array1(:,10), ".")
+title("User1 - ACC Z (G)")
+
+subplot(3, 3, 2)
+scatter(Array1(:, 3), Array1(:,11), ".")
+title("User1 - GYRO X (dps)")
+
+subplot(3, 3, 5)
+scatter(Array1(:, 3), Array1(:,12), ".")
+title("User1 - GYRO Y (dps)")
+
+subplot(3, 3, 8)
+scatter(Array1(:, 3), Array1(:,13), ".")
+title("User1 - GYRO Z (dps)")
+
+subplot(3, 3, 3)
+scatter(Array1(:, 3), Array1(:,17), ".")
+title("User1 - ROLL (¬∞)")
+
+subplot(3, 3, 6)
+scatter(Array1(:, 3), Array1(:,18), ".")
+title("User1 - PITCH (¬∞)")
+
+subplot(3, 3, 9)
+scatter(Array1(:, 3), Array1(:,19), ".")
+title("User1 - YAW (¬∞)")
+figure
+
+
+%% second user
+
+subplot(3, 3, 1)
+scatter(Array2(:, 3), Array2(:,8), ".")
+title("User2 - ACC X (G)")
+
+subplot(3, 3, 4)
+scatter(Array2(:, 3), Array2(:,9), ".")
+title("User2 - ACC Y (G)")
+
+subplot(3, 3, 7)
+scatter(Array2(:, 3), Array2(:,10), ".")
+title("User2 - ACC Z (G)")
+
+subplot(3, 3, 2)
+scatter(Array2(:, 3), Array2(:,11), ".")
+title("User2 - GYRO X (dps)")
+
+subplot(3, 3, 5)
+scatter(Array2(:, 3), Array2(:,12), ".")
+title("User2 - GYRO Y (dps)")
+
+subplot(3, 3, 8)
+scatter(Array2(:, 3), Array2(:,13), ".")
+title("User2 - GYRO Z (dps)")
+
+subplot(3, 3, 3)
+scatter(Array2(:, 3), Array2(:,17), ".")
+title("User2 - ROLL (¬∞)")
+
+subplot(3, 3, 6)
+scatter(Array2(:, 3), Array2(:,18), ".")
+title("User2 - PITCH (¬∞)")
+
+subplot(3, 3, 9)
+scatter(Array2(:, 3), Array2(:,19), ".")
+title("User2 - YAW (¬∞)")
+figure
+
+
+%% third user
+
+subplot(3, 3, 1)
+scatter(Array3(:, 3), Array3(:,8), ".")
+title("User3 - ACC X (G)")
+
+subplot(3, 3, 4)
+scatter(Array3(:, 3), Array3(:,9), ".")
+title("User3 - ACC Y (G)")
+
+subplot(3, 3, 7)
+scatter(Array3(:, 3), Array3(:,10), ".")
+title("User3 - ACC Z (G)")
+
+subplot(3, 3, 2)
+scatter(Array3(:, 3), Array3(:,11), ".")
+title("User3 - GYRO X (dps)")
+
+subplot(3, 3, 5)
+scatter(Array3(:, 3), Array3(:,12), ".")
+title("User3 - GYRO Y (dps)")
+
+subplot(3, 3, 8)
+scatter(Array3(:, 3), Array3(:,13), ".")
+title("User3 - GYRO Z (dps)")
+
+subplot(3, 3, 3)
+scatter(Array3(:, 3), Array3(:,17), ".")
+title("User3 - ROLL (¬∞)")
+
+subplot(3, 3, 6)
+scatter(Array3(:, 3), Array3(:,18), ".")
+title("User3 - PITCH (¬∞)")
+
+subplot(3, 3, 9)
+scatter(Array3(:, 3), Array3(:,19), ".")
+title("User3 - YAW (¬∞)")
+figure
+
+
+%% fourth user
+
+subplot(3, 3, 1)
+scatter(Array4(:, 3), Array4(:,8), ".")
+title("User4 - ACC X (G)")
+
+subplot(3, 3, 4)
+scatter(Array4(:, 3), Array4(:,9), ".")
+title("User4 - ACC Y (G)")
+
+subplot(3, 3, 7)
+scatter(Array4(:, 3), Array4(:,10), ".")
+title("User4 - ACC Z (G)")
+
+subplot(3, 3, 2)
+scatter(Array4(:, 3), Array4(:,11), ".")
+title("User4 - GYRO X (dps)")
+
+subplot(3, 3, 5)
+scatter(Array4(:, 3), Array4(:,12), ".")
+title("User4 - GYRO Y (dps)")
+
+subplot(3, 3, 8)
+scatter(Array4(:, 3), Array4(:,13), ".")
+title("User4 - GYRO Z (dps)")
+
+subplot(3, 3, 3)
+scatter(Array4(:, 3), Array4(:,17), ".")
+title("User4 - ROLL (¬∞)")
+
+subplot(3, 3, 6)
+scatter(Array4(:, 3), Array4(:,18), ".")
+title("User4 - PITCH (¬∞)")
+
+subplot(3, 3, 9)
+scatter(Array4(:, 3), Array4(:,19), ".")
+title("User4 - YAW (¬∞)")
+
+
+%% full table
+
+Array = [Array1; Array2; Array3; Array4];
+
+
+%% normalize (mean = 0 and std = 1)
+
+NormArray1 = zscore(Array1);
+NormArray2 = zscore(Array2);
+NormArray3 = zscore(Array3);
+NormArray4 = zscore(Array4);
+
+
+AllData = [Array1; Array2; Array3; Array4];
+
+
+
+% Create categorical variable for the class labels
+labels = categorical(AllData(:,2));
+
+% Create a table with the sensor data and the labels
+sensors = array2table(AllData(:,7:end));
+sensors.labels = labels;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Split the data into a training set and a testing set
+cvp = cvpartition(AllData, 'Holdout', 0.3);
+sensorsTrain = data(cvp.training, :);
+sensorsTest = data(cvp.test, :);
+
+% Create the image datastore for the training set
+imdsTrain = imageDatastore(sensorsTrain.Variables, 'LabelSource', 'foldernames');
+
+% Create the image datastore for the testing set
+imdsTest = imageDatastore(sensorsTest.Variables, 'LabelSource', 'foldernames');
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Create the image datastores for the training and testing sets
+
+sensorsTrain.Variables = categorical(sensorsTrain.Variables);
+imdsTrain = imageDatastore(sensorsTrain.Variables, 'LabelSource', 'foldernames');
+imdsTest = table2imds(sensorsTest, 'LabelSource', 'labels');
+
+
+% Define the CNN architecture
+layers = [    sequenceInputLayer(12)    convolution2dLayer(3,8,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    convolution2dLayer(3,16,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    convolution2dLayer(3,32,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    fullyConnectedLayer(5)    softmaxLayer    classificationLayer];
+
+% Train the CNN
+options = trainingOptions('adam', ...
+    'MaxEpochs',50, ...
+    'Verbose',false, ...
+    'Plots','training-progress');
+net = trainNetwork(imdsTrain,layers,options);
+
+% Evaluate the performance of the CNN
+YTest = classify(net,imdsTest);
+TTest = imdsTest.Labels;
+accuracy = sum(YTest == TTest)/numel(TTest)
