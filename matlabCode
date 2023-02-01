@@ -270,6 +270,8 @@ for i = 1:length(classes)
     X_class = X(y == class, :);
 end
 
+NX = Ndata(:, 8:19);
+
 %% creating train and test sets
 
 % Split data into training and test sets
@@ -279,12 +281,12 @@ p = 0.75; % proportion of data to use for training
 idx = randperm(size(Ndata,1));
 train_idx = idx(1:round(p*size(Ndata,1)));
 test_idx = idx(round(p*size(Ndata,1))+1:end);
-X_train = X(train_idx, :);
+X_train = NX(train_idx, :);
 y_train = y(train_idx);
-X_test = X(test_idx, :);
+X_test = NX(test_idx, :);
 y_test = y(test_idx);
 
-%% classifier
+%% KNN classifier
 
 % Train the KNN classifier
 model = fitcknn(X_train, y_train);
@@ -293,20 +295,19 @@ model = fitcknn(X_train, y_train);
 
 y_pred = predict(model, X_test);
 accuracy = mean(y_pred == y_test);
-fprintf("Accuracy: %f\n", accuracy)
+fprintf("KNN accuracy: %f\n", accuracy)
 
 % Create the confusion matrix
 C = confusionmat(y_test, y_pred);
 C_percent = 100 * C ./ sum(C, 2);
-disp(C_percent);
 
 
 % Create the heatmap
 figure;
-heatmap(C_percent, "Title", 'Confusion Matrix in [%]')
+heatmap(C_percent, "Title", 'KNN Confusion Matrix in [%]')
    
 
-%%
+%% SVM classifier
 
 
 % Train the SVM classifier
@@ -317,14 +318,35 @@ svm_model = fitcecoc(X_train, y_train);
 
 y_pred = predict(svm_model, X_test);
 accuracy = mean(y_pred == y_test);
-fprintf("Accuracy: %f\n", accuracy)
+fprintf("SVM accuracy: %f\n", accuracy)
 
 % Create the confusion matrix
 C_s = confusionmat(y_test, y_pred);
 C_percent_s = 100 * C_s ./ sum(C_s, 2);
-disp(C_percent_s);
 
 % Create the heatmap
 figure;
-heatmap(C_percent_s, "Title", 'Confusion Matrix in [%]')
-   
+heatmap(C_percent_s, "Title", 'SVM Confusion Matrix in [%]')
+
+%% ANN classifier
+net = feedforwardnet(10); % this creates a feedforward neural network with 10 hidden neurons
+
+% Train the neural network
+net = train(net, X_train', y_train');
+
+% Test the neural network
+y_pred = net(X_test');
+y_pred = round(y_pred');
+
+% Calculate the accuracy
+acc = mean(y_pred == y_test);
+fprintf('ANN accuracy: %.2f%%\n', acc * 100);
+
+% Create the confusion matrix
+C_a = confusionmat(y_test, y_pred);
+C_a = C_a(1:5, 1:5);
+C_percent_a = 100 * C_a ./ sum(C_a, 2);
+
+% Create the heatmap
+figure;
+heatmap(C_percent_a, "Title", 'ANN Confusion Matrix in [%]')
