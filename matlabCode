@@ -1,7 +1,10 @@
-data1 = readtable('user1_csv.csv');
-data2 = readtable('user2_csv.csv');
-data3 = readtable('user3_csv.csv');
-data4 = readtable('user4_csv.csv');
+%% import data
+data1 = readtable('/Users/amatl/Private/Studies/Digital Forensics/glasses/user1_csv.csv');
+data2 = readtable('/Users/amatl/Private/Studies/Digital Forensics/glasses/user2_csv.csv');
+data3 = readtable('/Users/amatl/Private/Studies/Digital Forensics/glasses/user3_csv.csv');
+data4 = readtable('/Users/amatl/Private/Studies/Digital Forensics/glasses/user4_csv.csv');
+
+%% creating bar plot
 
 Array1 = table2array(data1);
 
@@ -43,14 +46,47 @@ A3 = [Standing3, Walking3, Turn3, Stairs_up3, Stairs_down3];
 
 A4 = [Standing4, Walking4, Turn4, Stairs_up4, Stairs_down4];
 
+
 X1 = categorical({'Standing','Walking','Turn','Stairs up', 'Stairs down'});
 X1 = reordercats(X1,{'Standing','Walking','Turn','Stairs up', 'Stairs down'});
 Y = [A1; A2; A3; A4];
-bar(X1,Y)
-figure
+bar(X1, Y)
+figure;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% first user
+%% plots action vs time 
+
+subplot(2, 2, 1)
+scatter(Array1(:, 3), Array1(:, 2), 'blue', 'filled')
+[t,s] = title('User1','1 = Standing, 2 = Walking, 3 = Turn, 4 = Stairs_up, 5 = Stairs_down');
+s.FontSize = 8;
+xlabel("time")
+ylabel("action")
+
+subplot(2, 2, 2)
+scatter(Array2(:, 3), Array2(:, 2), 'blue', 'filled')
+[t,s] = title('User2','1 = Standing, 2 = Walking, 3 = Turn, 4 = Stairs_up, 5 = Stairs_down');
+s.FontSize = 8;
+xlabel("time")
+ylabel("action")
+
+subplot(2, 2, 3)
+scatter(Array3(:, 3), Array3(:, 2), 'blue', 'filled')
+[t,s] = title('User3','1 = Standing, 2 = Walking, 3 = Turn, 4 = Stairs_up, 5 = Stairs_down');
+s.FontSize = 8;
+xlabel("time")
+ylabel("action")
+
+subplot(2, 2, 4)
+scatter(Array4(:, 3), Array4(:, 2), 'blue', 'filled')
+[t,s] = title('User4','1 = Standing, 2 = Walking, 3 = Turn, 4 = Stairs_up, 5 = Stairs_down');
+s.FontSize = 8;
+xlabel("time")
+ylabel("action")
+figure;
+
+
+%% creating plots for different users
+% first user
 
 subplot(3, 3, 1)
 scatter(Array1(:, 3), Array1(:,8), ".")
@@ -87,10 +123,10 @@ title("User1 - PITCH (¬∞)")
 subplot(3, 3, 9)
 scatter(Array1(:, 3), Array1(:,19), ".")
 title("User1 - YAW (¬∞)")
-figure
+figure;
 
 
-%% second user
+% second user
 
 subplot(3, 3, 1)
 scatter(Array2(:, 3), Array2(:,8), ".")
@@ -127,10 +163,10 @@ title("User2 - PITCH (¬∞)")
 subplot(3, 3, 9)
 scatter(Array2(:, 3), Array2(:,19), ".")
 title("User2 - YAW (¬∞)")
-figure
+figure;
 
 
-%% third user
+% third user
 
 subplot(3, 3, 1)
 scatter(Array3(:, 3), Array3(:,8), ".")
@@ -167,10 +203,10 @@ title("User3 - PITCH (¬∞)")
 subplot(3, 3, 9)
 scatter(Array3(:, 3), Array3(:,19), ".")
 title("User3 - YAW (¬∞)")
-figure
+figure;
 
 
-%% fourth user
+% fourth user
 
 subplot(3, 3, 1)
 scatter(Array4(:, 3), Array4(:,8), ".")
@@ -208,64 +244,87 @@ subplot(3, 3, 9)
 scatter(Array4(:, 3), Array4(:,19), ".")
 title("User4 - YAW (¬∞)")
 
+%% preprocessing
 
-%% full table
-
-Array = [Array1; Array2; Array3; Array4];
-
-
-%% normalize (mean = 0 and std = 1)
+% normalize (mean = 0 and std = 1)
 
 NormArray1 = zscore(Array1);
 NormArray2 = zscore(Array2);
 NormArray3 = zscore(Array3);
 NormArray4 = zscore(Array4);
 
+% Combine arrays to form a single data matrix
 
-AllData = [Array1; Array2; Array3; Array4];
-
-
-
-% Create categorical variable for the class labels
-labels = categorical(AllData(:,2));
-
-% Create a table with the sensor data and the labels
-sensors = array2table(AllData(:,7:end));
-sensors.labels = labels;
+Ndata = [NormArray1; NormArray2; NormArray3; NormArray4];
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Split the data into a training set and a testing set
-cvp = cvpartition(AllData, 'Holdout', 0.3);
-sensorsTrain = data(cvp.training, :);
-sensorsTest = data(cvp.test, :);
+data = [Array1; Array2; Array3; Array4];
+% Extract features (columns 3 to 19) and labels (column 2)
 
-% Create the image datastore for the training set
-imdsTrain = imageDatastore(sensorsTrain.Variables, 'LabelSource', 'foldernames');
+X = data(:, 8:19);
+y = data(:, 2);
 
-% Create the image datastore for the testing set
-imdsTest = imageDatastore(sensorsTest.Variables, 'LabelSource', 'foldernames');
+classes = unique(y);
+for i = 1:length(classes)
+    class = classes(i);
+    X_class = X(y == class, :);
+end
+
+%% creating train and test sets
+
+% Split data into training and test sets
+
+rng(1); % for reproducibility
+p = 0.75; % proportion of data to use for training
+idx = randperm(size(Ndata,1));
+train_idx = idx(1:round(p*size(Ndata,1)));
+test_idx = idx(round(p*size(Ndata,1))+1:end);
+X_train = X(train_idx, :);
+y_train = y(train_idx);
+X_test = X(test_idx, :);
+y_test = y(test_idx);
+
+%% classifier
+
+% Train the KNN classifier
+model = fitcknn(X_train, y_train);
+
+% Evaluate the KNN classifier on the test set
+
+y_pred = predict(model, X_test);
+accuracy = mean(y_pred == y_test);
+fprintf("Accuracy: %f\n", accuracy)
+
+% Create the confusion matrix
+C = confusionmat(y_test, y_pred);
+C_percent = 100 * C ./ sum(C, 2);
+disp(C_percent);
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Create the image datastores for the training and testing sets
+% Create the heatmap
+figure;
+heatmap(C_percent, "Title", 'Confusion Matrix in [%]')
+   
 
-sensorsTrain.Variables = categorical(sensorsTrain.Variables);
-imdsTrain = imageDatastore(sensorsTrain.Variables, 'LabelSource', 'foldernames');
-imdsTest = table2imds(sensorsTest, 'LabelSource', 'labels');
+%%
 
 
-% Define the CNN architecture
-layers = [    sequenceInputLayer(12)    convolution2dLayer(3,8,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    convolution2dLayer(3,16,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    convolution2dLayer(3,32,'Padding','same')    batchNormalizationLayer    reluLayer    maxPooling2dLayer(2,'Stride',2)    fullyConnectedLayer(5)    softmaxLayer    classificationLayer];
+% Train the SVM classifier
 
-% Train the CNN
-options = trainingOptions('adam', ...
-    'MaxEpochs',50, ...
-    'Verbose',false, ...
-    'Plots','training-progress');
-net = trainNetwork(imdsTrain,layers,options);
+svm_model = fitcecoc(X_train, y_train);
 
-% Evaluate the performance of the CNN
-YTest = classify(net,imdsTest);
-TTest = imdsTest.Labels;
-accuracy = sum(YTest == TTest)/numel(TTest)
+% Evaluate the SVM classifier on the test set
+
+y_pred = predict(svm_model, X_test);
+accuracy = mean(y_pred == y_test);
+fprintf("Accuracy: %f\n", accuracy)
+
+% Create the confusion matrix
+C_s = confusionmat(y_test, y_pred);
+C_percent_s = 100 * C_s ./ sum(C_s, 2);
+disp(C_percent_s);
+
+% Create the heatmap
+figure;
+heatmap(C_percent_s, "Title", 'Confusion Matrix in [%]')
+   
